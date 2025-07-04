@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Documentos - Santa Fe Provincia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./estilos.css">
+</head>
+<body class="bg-gray-50 flex justify-center">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-7xl">
+        <div class="bg-white p-6 sm:p-8 rounded-xl shadow-lg h-fit">
+            <header class="text-center mb-8">
+                <div class="flex justify-center items-center gap-4 mb-2">
+                    <svg width="50" height="50" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#FFC802"/><stop offset="25%" style="stop-color:#FF7402"/><stop offset="50%" style="stop-color:#FF6D7E"/><stop offset="75%" style="stop-color:#E42153"/><stop offset="100%" style="stop-color:#3C3AE5"/></linearGradient></defs><g fill="url(#g)"><path d="M0,15 C20,5, 40,25, 50,15 L50,0 C40,10, 20,-5, 0,5 Z"/><path d="M0,40 C20,30, 40,50, 50,40 L50,25 C40,35, 20,20, 0,30 Z"/><path d="M0,65 C20,55, 40,75, 50,65 L50,50 C40,60, 20,45, 0,55 Z"/><rect x="55" y="0" width="45" height="15"/><rect x="55" y="25" width="35" height="15"/><rect x="55" y="50" width="25" height="15"/></g></svg>
+                    <div><h1 class="text-2xl font-extrabold text-brand-dark">Santa Fe</h1><h2 class="text-xl font-semibold text-gray-500 -mt-1">PROVINCIA</h2></div>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mt-2">Generador de Documentos Oficiales</h3>
+            </header>
+            <form id="agreementForm" class="space-y-6">
+                <div class="pb-6">
+                    <h2 class="text-lg font-semibold mb-4 text-brand-dark">Seleccione Tipo de Documento</h2>
+                    <select id="agreementType" class="mt-1 w-full p-2 border border-gray-300 rounded-md shadow-sm">
+                        <option value="acuerdoConciliatorio">Acuerdo Conciliatorio</option>
+                        <option value="primeraProvidencia">Primera Providencia</option>
+                        <option value="cedulaPrimerDecreto">Cédula Primer Decreto</option>
+                        <option value="standard">Acuerdo Estándar (Nuevo)</option>
+                        <option value="warranty">Acuerdo de Garantía (Nuevo)</option>
+                    </select>
+                </div>
+
+                <div class="border-b pb-6"><h2 class="text-lg font-semibold mb-4 text-brand-dark">1. Datos Generales</h2><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label for="ciudadAcuerdo" class="block text-sm font-medium text-gray-700">Ciudad</label><input type="text" id="ciudadAcuerdo" value="Santa Fe" class="mt-1 w-full p-2 border border-gray-300 rounded-md shadow-sm"></div><div><label for="fechaAcuerdo" class="block text-sm font-medium text-gray-700">Fecha</label><input type="date" id="fechaAcuerdo" class="mt-1 w-full p-2 border border-gray-300 rounded-md shadow-sm"></div></div><div class="mt-4"><label for="expediente" class="block text-sm font-medium text-gray-700">N° Expediente (VUF)</label><input type="text" id="expediente" placeholder="Ej: 00101-0123456-7" class="mt-1 w-full p-2 border border-gray-300 rounded-md shadow-sm"></div><div class="mt-4" id="campoConsumidorDenunciante"><label for="consumidorDenunciante" class="block text-sm font-medium text-gray-700">Nombre Consumidor Denunciante</label><input type="text" id="consumidorDenunciante" class="mt-1 w-full p-2 border border-gray-300 rounded-md"></div><div class="mt-4" id="campoConciliador"><label for="conciliadorAsignado" class="block text-sm font-medium text-gray-700">Conciliador Asignado</label><input type="text" id="conciliadorAsignado" class="mt-1 w-full p-2 border border-gray-300 rounded-md"></div></div>
+                
+                <div class="border-b pb-6" id="seccionEmpresa"><h2 class="text-lg font-semibold mb-4 text-brand-dark">2. Datos de la Empresa / Proveedor</h2><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label for="empresaApoderado" class="block text-sm font-medium text-gray-700">Nombre Apoderado</label><input type="text" id="empresaApoderado" class="mt-1 w-full p-2 border border-gray-300 rounded-md"></div><div><label for="empresaDNI" class="block text-sm font-medium text-gray-700">DNI Apoderado</label><input type="text" id="empresaDNI" class="mt-1 w-full p-2 border border-gray-300 rounded-md"></div><div><label for="empresaNombre" class="block text-sm font-medium text-gray-700">Razón Social</label><input type="text" id="empresaNombre" class="mt-1 w-full p-2 border border-gray-300 rounded-md"></div><div><label for="empresaCUIT" class="block text-sm font-medium text-gray-700">CUIT</label><input type="text" id="empresaCUIT" class="mt-1 w-full p-2 border border-gray-300 rounded-md"></div></div><div class="mt-4"><label for="empresaDomicilio" class="block text-sm font-medium text-gray-700">Domicilio</label><input type="text" id="empresaDomicilio" class="mt-1 w-full p-2 border border-gray-300 rounded-md"></div><div class="mt-4"><label for="empresaCiudad" class="block text-sm font-medium text-gray-700">Ciudad</label><input type="text" id="empresaCiudad" class="mt-1 w-full p-2 border border-gray-300 rounded-md"></div></div>
+                
+                <div class="border-b pb-6" id="seccionConsumidor"><h2 class="text-lg font-semibold mb-4 text-brand-dark">3. Datos del Consumidor</h2><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label for="consumidorNombre" class="block text-sm font-medium text-gray-700">Nombre Completo</label><input type="text" id="consumidorNombre" class="mt-1 w-full p-2 border border-gray-300 rounded-md"></div><div><label for="consumidorDNI" class="block text-sm font-medium text-gray-700">DNI</label><input type="text" id="consumidorDNI" class="mt-1 w-full p-2 border border-gray-300 rounded-md"></div></div><div class="mt-4"><label for="consumidorDomicilio" class="block text-sm font-medium text-gray-700">Domicilio</label><input type="text" id="consumidorDomicilio" class="mt-1 w-full p-2 border border-gray-300 rounded-md"></div><div class="mt-4"><label for="consumidorCiudad" class="block text-sm font-medium text-gray-700">Ciudad</label><input type="text" id="consumidorCiudad" class="mt-1 w-full p-2 border border-gray-300 rounded-md"></div></div>
+                
+                <div class="border-b pb-6 hidden" id="seccionCedula"><h2 class="text-lg font-semibold mb-4 text-brand-dark">Datos Específicos Cédula</h2><div><label for="cedulaNombre" class="block text-sm font-medium text-gray-700">Nombre Receptor Cédula</label><input type="text" id="cedulaNombre" class="mt-1 w-full p-2 border border-gray-300 rounded-md"></div><div class="mt-4"><label for="cedulaDomicilio" class="block text-sm font-medium text-gray-700">Domicilio Receptor Cédula</label><input type="text" id="cedulaDomicilio" class="mt-1 w-full p-2 border border-gray-300 rounded-md"></div><div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label for="cedulaLocalidad" class="block text-sm font-medium text-gray-700">Localidad Receptor Cédula</label><input type="text" id="cedulaLocalidad" class="mt-1 w-full p-2 border border-gray-300 rounded-md"></div><div><label for="cedulaCP" class="block text-sm font-medium text-gray-700">Código Postal Receptor Cédula</label><input type="text" id="cedulaCP" class="mt-1 w-full p-2 border border-gray-300 rounded-md"></div></div><div class="mt-4"><label for="cedulaProvincia" class="block text-sm font-medium text-gray-700">Provincia Receptor Cédula</label><input type="text" id="cedulaProvincia" class="mt-1 w-full p-2 border border-gray-300 rounded-md"></div><div class="mt-4"><label for="firmanteCedula" class="block text-sm font-medium text-gray-700">Firmante Cédula (Ej: Iiiii Olikjklarja)</label><input type="text" id="firmanteCedula" class="mt-1 w-full p-2 border border-gray-300 rounded-md"></div></div>
+
+                <div class="pb-6" id="seccionClausulas"><h2 class="text-lg font-semibold mb-4 text-brand-dark">4. Cláusulas / Contenido Específico</h2><div class="space-y-4">
+                    <div id="editable-clausulas">
+                        </div>
+                </div></div>
+
+                <div class="flex flex-col sm:flex-row gap-4 pt-2">
+                    <button type="button" id="generatePdfBtn" class="w-full btn-primary text-white font-bold py-3 px-4 rounded-lg shadow-md">Generar PDF</button>
+                    <button type="button" id="saveDataBtn" class="w-full btn-secondary text-white font-bold py-3 px-4 rounded-lg shadow-md">Guardar Datos</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="lg:sticky top-8 h-fit">
+            <div class="preview-aspect-ratio-container">
+                <div id="preview-wrapper">
+                    <div id="preview-header-content" class="preview-header">
+                        </div>
+                    <div id="preview-title-content" class="preview-title">
+                        </div>
+                    <div class="preview-body" id="preview-body-text"></div>
+                    <div id="preview-dynamic-content">
+                        </div>
+                    <div id="preview-footer-content" class="preview-body" style="margin-top: 20px;">
+                        </div>
+                    <div class="preview-fixed-footer">
+                        <hr>
+                        <div style="font-style: italic;">"2025 - 210 años del Congreso de los Pueblos Libres"</div>
+                        <div>Bv. Pellegrini 3100 - Santa Fe (CP 3000)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./script.js"></script>
+</body>
+</html>

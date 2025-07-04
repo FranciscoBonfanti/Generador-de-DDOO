@@ -1,0 +1,366 @@
+/* styles.css */
+
+/* Base Styles */
+body {
+    font-family: 'Inter', sans-serif;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Container and Layout */
+.container {
+    max-width: 1280px; /* Equivalent to max-w-7xl in Tailwind */
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1.5rem; /* Equivalent to p-6 in Tailwind */
+}
+
+@media (min-width: 640px) { /* sm breakpoint */
+    .container {
+        padding: 2.5rem; /* sm:p-8 */
+    }
+}
+
+@media (min-width: 1024px) { /* lg breakpoint */
+    .container {
+        padding: 4rem; /* lg:p-8 */
+        grid-template-columns: 1fr 1fr; /* lg:grid-cols-2 */
+    }
+    .lg\:sticky {
+        position: sticky;
+    }
+    .top-8 {
+        top: 2rem; /* Equivalent to top-8 */
+    }
+}
+
+/* Form Styles */
+.bg-white {
+    background-color: #fff;
+}
+
+.p-6 {
+    padding: 1.5rem;
+}
+
+.rounded-xl {
+    border-radius: 0.75rem;
+}
+
+.shadow-lg {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.h-fit {
+    height: fit-content;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mb-8 {
+    margin-bottom: 2rem;
+}
+
+.flex {
+    display: flex;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.gap-4 {
+    gap: 1rem;
+}
+
+.mb-2 {
+    margin-bottom: 0.5rem;
+}
+
+.text-2xl {
+    font-size: 1.5rem;
+}
+
+.font-extrabold {
+    font-weight: 800;
+}
+
+.text-brand-dark {
+    color: #E42153; /* A strong brand color */
+}
+
+.text-xl {
+    font-size: 1.25rem;
+}
+
+.font-semibold {
+    font-weight: 600;
+}
+
+.-mt-1 {
+    margin-top: -0.25rem;
+}
+
+.text-gray-500 {
+    color: #6b7280;
+}
+
+.mt-2 {
+    margin-top: 0.5rem;
+}
+
+.font-bold {
+    font-weight: 700;
+}
+
+.text-gray-900 {
+    color: #111827;
+}
+
+.space-y-6 > * + * {
+    margin-top: 1.5rem;
+}
+
+.pb-6 {
+    padding-bottom: 1.5rem;
+}
+
+.border-b {
+    border-bottom-width: 1px;
+    border-color: #e5e7eb; /* gray-200 */
+}
+
+.text-lg {
+    font-size: 1.125rem;
+}
+
+.mb-4 {
+    margin-bottom: 1rem;
+}
+
+.grid {
+    display: grid;
+}
+
+.grid-cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.gap-4 {
+    gap: 1rem;
+}
+
+@media (min-width: 640px) { /* sm breakpoint */
+    .sm\:grid-cols-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+.block {
+    display: block;
+}
+
+.text-sm {
+    font-size: 0.875rem;
+}
+
+.font-medium {
+    font-weight: 500;
+}
+
+.text-gray-700 {
+    color: #374151;
+}
+
+.mt-1 {
+    margin-top: 0.25rem;
+}
+
+.w-full {
+    width: 100%;
+}
+
+.p-2 {
+    padding: 0.5rem;
+}
+
+.border {
+    border-width: 1px;
+}
+
+.border-gray-300 {
+    border-color: #d1d5db;
+}
+
+.rounded-md {
+    border-radius: 0.375rem;
+}
+
+.shadow-sm {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.hidden {
+    display: none;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: #E42153; /* Brand red */
+    color: #ffffff;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.btn-primary:hover {
+    background-color: #C01B45; /* Darker red on hover */
+}
+
+.btn-secondary {
+    background-color: #4CAF50; /* Green for save */
+    color: #ffffff;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.btn-secondary:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+.btn-tertiary {
+    background-color: #f3f4f6; /* light gray */
+    color: #374151; /* gray-700 */
+    border: 1px solid #d1d5db; /* gray-300 */
+    transition: background-color 0.2s ease-in-out;
+}
+
+.btn-tertiary:hover {
+    background-color: #e5e7eb; /* gray-200 */
+}
+
+.py-3 {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+}
+
+.px-4 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.rounded-lg {
+    border-radius: 0.5rem;
+}
+
+.pt-2 {
+    padding-top: 0.5rem;
+}
+
+@media (min-width: 640px) { /* sm breakpoint */
+    .sm\:flex-row {
+        flex-direction: row;
+    }
+}
+
+/* Preview Section */
+.preview-aspect-ratio-container {
+    position: relative;
+    width: 100%;
+    padding-top: 141.42%; /* A4 aspect ratio (297/210 * 100%) */
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border-radius: 0.75rem;
+    overflow: hidden; /* Ensure content doesn't overflow rounded corners */
+}
+
+#preview-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 20mm 20mm;
+    box-sizing: border-box;
+    font-size: 11pt;
+    line-height: 1.5;
+    color: #000;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto; /* ← agrega scroll vertical */
+}
+
+
+.preview-header {
+    text-align: center;
+    font-size: 0.9em;
+    color: #494963; /* Specific color from the document mockups */
+    margin-bottom: 10mm;
+}
+
+.preview-header div:first-child {
+    font-weight: bold;
+}
+
+.preview-title {
+    text-align: center;
+    font-weight: bold;
+    font-size: 14pt;
+    margin-bottom: 15mm;
+    text-transform: uppercase;
+}
+
+.preview-body {
+  text-align: justify;
+  margin-bottom: 30mm; /* Aumentar el margen inferior */
+  position: relative;
+  z-index: 1;
+}
+
+.preview-clausula {
+    margin-bottom: 5mm;
+    text-align: justify;
+}
+
+.preview-clausula-title {
+    font-weight: bold;
+}
+
+/* .preview-fixed-footer {
+  position: absolute;
+  bottom: 20mm;
+  left: 20mm;
+  right: 20mm;
+  text-align: center;
+  font-size: 9pt;
+  color: #646464;
+  padding-top: 5mm;
+  border-top: 0.5px solid #494963;
+  background-color: white; 
+  z-index: 10;
+}
+
+.preview-fixed-footer div:first-of-type {
+    font-style: italic;
+    margin-bottom: 2mm;
+} */
+
+/* General Input/Textarea Focus Styling */
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: #E42153; /* Brand red on focus */
+    box-shadow: 0 0 0 1px #E42153;
+}
+
+/* Scrollbar for overall page if needed */
+body {
+    overflow-y: auto;
+}
+
+/* Utility classes (derived from Tailwind for quick use) */
+.flex-col { flex-direction: column; }
+.gap-12 { gap: 3rem; }
+.space-y-4 > * + * { margin-top: 1rem; }
