@@ -2,6 +2,10 @@ const { jsPDF } = window.jspdf;
 const form = document.getElementById('agreementForm');
 const agreementTypeSelect = document.getElementById('agreementType');
 
+
+
+
+
 // --- Helper function for date formatting ---
 function getFormattedDate(dateInput) {
     let date = { day: ' ', month: ' ', year: ' ' };
@@ -276,7 +280,6 @@ function updatePreview() {
     document.getElementById('preview-footer-content').innerHTML = footerContent || '';
 }
 
-// --- Function to generate and DOWNLOAD the PDF ---
 function downloadPdf() {
     const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
     const data = getFormData();
@@ -285,147 +288,122 @@ function downloadPdf() {
 
     const marginLeft = 20;
     const marginRight = 20;
-    const pageContentWidth = doc.internal.pageSize.width - marginLeft - marginRight;
+    const pageWidth = doc.internal.pageSize.width;
+    const pageHeight = doc.internal.pageSize.height;
+    const maxWidth = pageWidth - marginLeft - marginRight;
     let currentY = 20;
 
-    // Header (rendered as raw HTML to extract text)
+    // Header
     if (template.header) {
         doc.setFont('helvetica', 'bold');
         doc.setFontSize(10);
         doc.setTextColor(73, 73, 99);
-        const headerDiv = document.createElement('div');
-        headerDiv.innerHTML = template.header;
-        Array.from(headerDiv.children).forEach(child => {
-            const lines = doc.splitTextToSize(child.innerText, pageContentWidth);
-            doc.text(lines, doc.internal.pageSize.width / 2, currentY, { align: 'center' });
-            currentY += lines.length * 4; // Approx line height
+
+        // Si template.header es HTML, extraemos solo el texto sin etiquetas
+        // Aquí asumo que template.header es texto simple o texto con saltos de línea
+        const headerText = template.header.replace(/<\/?[^>]+(>|$)/g, "").trim();
+        const headerLines = doc.splitTextToSize(headerText, maxWidth);
+        headerLines.forEach(line => {
+            doc.text(line, pageWidth / 2, currentY, { align: 'center' });
+            currentY += 6;
         });
-        currentY += 10;
+        currentY += 6;
     }
 
     // Title
     if (template.title) {
         doc.setFont('helvetica', 'bold');
         doc.setFontSize(14);
-        doc.setTextColor(0, 0, 0); // Reset text color to black for main content
-        doc.text(template.title, doc.internal.pageSize.width / 2, currentY, { align: 'center' });
-        currentY += 15;
+        doc.setTextColor(0, 0, 0);
+        doc.text(template.title, pageWidth / 2, currentY, { align: 'center' });
+        currentY += 12;
     }
 
+    // Intro text
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(11);
     doc.setTextColor(0, 0, 0);
 
-    // Intro text
     const introText = template.intro(data);
-    const introLines = doc.splitTextToSize(introText, pageContentWidth);
-    doc.text(introLines, marginLeft, currentY, { align: 'justify', lineHeightFactor: 1.5 });
-    currentY += (introLines.length * (11 * 0.352778) * 1.5) + 10;
-
-    function renderSection(title, content) {
-        if (!content || content.trim() === '' || content.trim() === '...') return;
-
-        const estimatedLineHeight = (11 * 0.352778) * 1.5; // Estimated height for 11pt with 1.5 line height
-
-        // Check if new section fits on current page
-        if (currentY + estimatedLineHeight > doc.internal.pageSize.height - 40) { // Keep some margin at bottom
+    const introLines = doc.splitTextToSize(introText, maxWidth);
+    introLines.forEach(line => {
+        if (currentY > pageHeight - 40) {
             doc.addPage();
-            currentY = 20; // Reset Y for new page, add top margin
-            // Re-render header/title on new page if needed for consistency (optional, depending on document style)
-            if (template.header) {
-                doc.setFont('helvetica', 'bold');
-                doc.setFontSize(10);
-                doc.setTextColor(73, 73, 99);
-                const headerDiv = document.createElement('div');
-                headerDiv.innerHTML = template.header;
-                Array.from(headerDiv.children).forEach(child => {
-                    const lines = doc.splitTextToSize(child.innerText, pageContentWidth);
-                    doc.text(lines, doc.internal.pageSize.width / 2, currentY, { align: 'center' });
-                    currentY += lines.length * 4;
-                });
-                currentY += 10;
-            }
-            if (template.title) {
-                doc.setFont('helvetica', 'bold');
-                doc.setFontSize(14);
-                doc.setTextColor(0, 0, 0);
-                doc.text(template.title, doc.internal.pageSize.width / 2, currentY, { align: 'center' });
-                currentY += 15;
-            }
-            doc.setFont('helvetica', 'normal');
-            doc.setFontSize(11);
-            doc.setTextColor(0, 0, 0);
+            currentY = 20;
+        }
+        doc.text(line, marginLeft, currentY, { align: 'left' });
+        currentY += 6;
+    });
+    currentY += 6;
+
+// Render clauses
+if (template.clauses && template.clauses.length > 0) {
+    template.clauses.forEach(clause => {
+        let clauseText = '';
+
+        if (clause.editable) {
+            clauseText = data.clausulas[clause.id] || '';
+        } else if (typeof clause.defaultText === 'function') {
+            clauseText = clause.defaultText(data) || '';
+        } else {
+            clauseText = clause.defaultText || '';
         }
 
-        doc.setFont('helvetica', 'bold');
-        let sectionTitleDisplay = title ? `${title}: ` : '';
-        const titleWidth = doc.getTextWidth(sectionTitleDisplay);
-        
-        let contentToSplit = content;
-        let textX = marginLeft;
-        let textWidth = pageContentWidth;
-
-        // Special handling for the first line to align title and content
-        if (sectionTitleDisplay) {
-            doc.text(sectionTitleDisplay, marginLeft, currentY);
-            textX = marginLeft + titleWidth;
-            textWidth = pageContentWidth - titleWidth;
+        // Solo continuar si hay texto para imprimir
+        if (!clauseText.trim()) {
+            return; // omitimos cláusula sin texto
         }
 
-        doc.setFont('helvetica', 'normal');
-        const contentLines = doc.splitTextToSize(contentToSplit, textWidth);
-        
-        if (contentLines.length > 0) {
-            doc.text(contentLines, textX, currentY, { align: 'justify', lineHeightFactor: 1.5 });
-            currentY += (contentLines.length * estimatedLineHeight) + 5; // Add vertical spacing between clauses
-        } else if (sectionTitleDisplay) {
-             currentY += estimatedLineHeight + 5; // Move down even if content is empty but title was displayed
-        }
-    }
+        const clauseTitle = clause.title ? clause.title.toUpperCase() + ':' : '';
+        const fullText = clauseTitle ? clauseTitle + ' ' + clauseText : clauseText;
 
-    // Render clauses / dynamic content
-    if (template.clauses && template.clauses.length > 0) {
-        template.clauses.forEach(clause => {
-            let clauseText;
-            if (clause.editable) {
-                clauseText = data.clausulas[clause.id] || clause.placeholder || '';
-            } else if (typeof clause.defaultText === 'function') {
-                clauseText = clause.defaultText(data);
-            } else {
-                clauseText = clause.defaultText;
+        const lines = doc.splitTextToSize(fullText, maxWidth);
+        lines.forEach(line => {
+            if (currentY > pageHeight - 40) {
+                doc.addPage();
+                currentY = 20;
             }
-            renderSection(clause.title, clauseText);
+            doc.text(line, marginLeft, currentY, { align: 'left' });
+            currentY += 6;
         });
-    }
+        currentY += 6;
+    });
+}
+
 
     // Footer
     const footerContent = typeof template.footer === 'function' ? template.footer(data) : template.footer;
     if (footerContent) {
-        const footerLines = doc.splitTextToSize(footerContent, pageContentWidth);
-        const requiredHeightFooter = (footerLines.length * (11 * 0.352778) * 1.5);
-        if (currentY + requiredHeightFooter > doc.internal.pageSize.height - 50) { // More space for full footer
+        const footerLines = doc.splitTextToSize(footerContent, maxWidth);
+        if (currentY + (footerLines.length * 6) > pageHeight - 30) {
             doc.addPage();
             currentY = 20;
         }
-        doc.text(footerLines, marginLeft, currentY, { align: 'justify', lineHeightFactor: 1.5 });
+        footerLines.forEach(line => {
+            doc.text(line, marginLeft, currentY, { align: 'left' });
+            currentY += 6;
+        });
+        currentY += 6;
     }
 
-    // Fixed footer (Page number, address, etc.)
-    const fixedFooterY = doc.internal.pageSize.height - 30;
-    doc.setLineWidth(0.5);
+    // Fixed footer with line and text
+    const fixedFooterY = pageHeight - 20;
     doc.setDrawColor(73, 73, 99);
-    doc.line(marginLeft, fixedFooterY, doc.internal.pageSize.width - marginRight, fixedFooterY);
-    let fixedFooterCurrentY = fixedFooterY + 8;
+    doc.setLineWidth(0.5);
+    doc.line(marginLeft, fixedFooterY, pageWidth - marginRight, fixedFooterY);
+
     doc.setFontSize(9);
     doc.setFont('helvetica', 'italic');
     doc.setTextColor(100, 100, 100);
-    doc.text('"2025 - 210 años del Congreso de los Pueblos Libres"', doc.internal.pageSize.width / 2, fixedFooterCurrentY, { align: 'center' });
-    fixedFooterCurrentY += 4;
-    doc.setFont('helvetica', 'normal');
-    doc.text("Bv. Pellegrini 3100 - Santa Fe (CP 3000)", doc.internal.pageSize.width / 2, fixedFooterCurrentY, { align: 'center' });
+    doc.text('"2025 - 210 años del Congreso de los Pueblos Libres"', pageWidth / 2, fixedFooterY + 6, { align: 'center' });
 
+    doc.setFont('helvetica', 'normal');
+    doc.text('Bv. Pellegrini 3100 - Santa Fe (CP 3000)', pageWidth / 2, fixedFooterY + 12, { align: 'center' });
+
+    // Guardar PDF
     doc.save(`${currentDocumentType}_${data.expediente || 'doc'}.pdf`);
 }
+
 
 function saveData() {
     try {
@@ -493,7 +471,7 @@ function loadData() {
             loadDynamicFormClauses();
 
             updatePreview(); // Update preview after loading all data
-            alert('Datos cargados exitosamente desde el navegador.');
+            // alert('Datos cargados exitosamente desde el navegador.');
         } else {
             alert('No hay datos guardados para cargar.');
         }
@@ -512,7 +490,7 @@ agreementTypeSelect.addEventListener('change', () => {
 });
 document.getElementById('generatePdfBtn').addEventListener('click', downloadPdf);
 document.getElementById('saveDataBtn').addEventListener('click', saveData);
-document.getElementById('loadDataBtn').addEventListener('click', loadData);
+// document.getElementById('loadDataBtn').addEventListener('click', loadData);
 
 
 // Initial setup
