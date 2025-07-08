@@ -10,7 +10,7 @@ const agreementTypeSelect = document.getElementById('agreementType');
 function getFormattedDate(dateInput) {
     let date = { day: ' ', month: ' ', year: ' ' };
     if (dateInput) {
-        const d = new Date(dateInput + 'T00:00:00'); // Ensures correct date without timezone issues
+        const d = new Date(dateInput + 'T00:00:00'); 
         const meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
         date = { day: d.getDate(), month: meses[d.getMonth()], year: d.getFullYear() };
     }
@@ -41,9 +41,9 @@ const documentTemplates = {
         ]
     },
     primeraProvidencia: {
-        formFields: ['campoConsumidorDenunciante', 'campoConciliador'], // Only these fields are relevant
+        formFields: ['campoConsumidorDenunciante', 'campoConciliador'], 
         intro: (data) => `Ref. VUF N.º ${data.expediente || '[Expediente]'} “XXX c/ YYY s/ Presunta Infracción a la Ley 24240”\nSanta Fe, “Cuna de la Constitución Nacional”, ${data.fecha.day} de ${data.fecha.month} de ${data.fecha.year}. Vista la denuncia efectuada por el Sr. ${data.consumidorDenunciante || '[Nombre Consumidor Denunciante]'}, y resultando competente esta Dirección General de Comercio Interior y Servicios como autoridad de aplicación de la Ley 24240 en el ámbito de la Provincia de Santa Fe, se abre la instancia conciliatoria, como primer tramo del procedimiento administrativo. Téngase presente que el correo electrónico consignado en la denuncia será considerado como domicilio electrónico del consumidor y sólo en caso de resultar imposible el diligenciamiento de las notificaciones por ese medio, se procederá a la notificación en formato papel al domicilio postal.`,
-        title: '', // No explicit title in the document
+        title: '', 
         header: getCommonHeader(),
         footer: 'Notifíquese.',
         clauses: [
@@ -63,9 +63,8 @@ const documentTemplates = {
             const providenciaClauses = documentTemplates.primeraProvidencia.clauses.map(clause => {
                 let clauseText = typeof clause.defaultText === 'function' ? clause.defaultText(data) : clause.defaultText;
                 // For Providencia inside Cedula, we don't need the clause titles like "ASIGNACIÓN CONCILIADOR"
-                // We just need the continuous text
                 return clauseText;
-            }).join(' '); // Join with a space to make it continuous
+            }).join(' '); 
 
             const providenciaFooter = 'Notifíquese.';
 
@@ -81,7 +80,7 @@ const documentTemplates = {
             Ministerio de Desarrollo Productivo
             Provincia de Santa Fe
         `,
-        clauses: [] // No specific "clauses" section like conciliatory agreements, content is in intro/footer
+        clauses: []
     },
     standard: { // User's new standard agreement type
         formFields: ['seccionEmpresa', 'seccionConsumidor', 'seccionClausulas'],
@@ -158,7 +157,7 @@ function getFormData() {
         cedulaProvincia: document.getElementById('cedulaProvincia').value,
         firmanteCedula: document.getElementById('firmanteCedula').value,
         clausulas: clausesData,
-        documentType: currentDocumentType // Store the selected document type
+        documentType: currentDocumentType 
     };
 }
 
@@ -217,7 +216,7 @@ function loadDynamicFormClauses() {
                 const savedData = JSON.parse(localStorage.getItem('agreementFormData'));
                 if (savedData && savedData.documentType === currentDocumentType && savedData.clausulas && savedData.clausulas[clause.id]) {
                     textarea.value = savedData.clausulas[clause.id];
-                } else if (clause.defaultText) { // Set default text if no saved data
+                } else if (clause.defaultText) {
                     textarea.value = typeof clause.defaultText === 'function' ? clause.defaultText(getFormData()) : clause.defaultText;
                 }
 
@@ -230,7 +229,7 @@ function loadDynamicFormClauses() {
     } else {
         document.getElementById('seccionClausulas').classList.add('hidden');
     }
-    updatePreview(); // Update preview after loading new clauses
+    updatePreview(); 
 }
 
 // --- Function to update the HTML PREVIEW ---
@@ -265,7 +264,7 @@ function updatePreview() {
                 clauseText = clause.defaultText;
             }
 
-            if (clauseText && clauseText.trim() !== '') { // Only render if there's content
+            if (clauseText && clauseText.trim() !== '') { 
                 div.innerHTML = `
                     <span class="preview-clausula-title">${clause.title}: </span>
                     <span class="preview-clausula-text" id="preview-clausula-${clause.id}">${clauseText}</span>
@@ -351,7 +350,7 @@ if (template.clauses && template.clauses.length > 0) {
 
         // Solo continuar si hay texto para imprimir
         if (!clauseText.trim()) {
-            return; // omitimos cláusula sin texto
+            return; 
         }
 
         const clauseTitle = clause.title ? clause.title.toUpperCase() + ':' : '';
@@ -408,7 +407,7 @@ if (template.clauses && template.clauses.length > 0) {
 function saveData() {
     try {
         const data = getFormData();
-        localStorage.setItem('agreementFormData', JSON.stringify(data)); // Save to localStorage
+        localStorage.setItem('agreementFormData', JSON.stringify(data));
         alert('Datos guardados exitosamente en el navegador.');
     } catch (error) {
         console.error("Error al guardar los datos:", error);
@@ -422,7 +421,7 @@ function loadData() {
         if (savedData) {
             // Restore document type
             agreementTypeSelect.value = savedData.documentType || 'acuerdoConciliatorio';
-            toggleFormSections(); // Ensure correct sections are visible
+            toggleFormSections();
 
             // Restore general fields
             document.getElementById('ciudadAcuerdo').value = savedData.ciudadAcuerdo || 'Santa Fe';
@@ -431,10 +430,9 @@ function loadData() {
                 const day = String(savedData.fecha.day).padStart(2, '0');
                 const monthIndex = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"].indexOf(savedData.fecha.month);
                 const month = String(monthIndex + 1).padStart(2, '0'); // Convert month name to number
-                const year = savedData.fecha.year;
                 document.getElementById('fechaAcuerdo').value = `${year}-${month}-${day}`;
             } else {
-                 document.getElementById('fechaAcuerdo').valueAsDate = new Date(); // Default to today if no saved date
+                 document.getElementById('fechaAcuerdo').valueAsDate = new Date();
             }
             
             document.getElementById('expediente').value = savedData.expediente || '';
@@ -470,8 +468,7 @@ function loadData() {
             // Reload dynamic clauses for editable textareas
             loadDynamicFormClauses();
 
-            updatePreview(); // Update preview after loading all data
-            // alert('Datos cargados exitosamente desde el navegador.');
+            updatePreview(); 
         } else {
             alert('No hay datos guardados para cargar.');
         }
@@ -484,21 +481,19 @@ function loadData() {
 // --- Event Listeners ---
 form.addEventListener('input', updatePreview);
 agreementTypeSelect.addEventListener('change', () => {
-    toggleFormSections(); // Hide/show sections based on type
-    loadDynamicFormClauses(); // Reload form clauses on type change
-    updatePreview(); // Update preview
+    toggleFormSections(); 
+    loadDynamicFormClauses(); 
+    updatePreview(); 
 });
 document.getElementById('generatePdfBtn').addEventListener('click', downloadPdf);
 document.getElementById('saveDataBtn').addEventListener('click', saveData);
-// document.getElementById('loadDataBtn').addEventListener('click', loadData);
 
 
 // Initial setup
 window.addEventListener('load', () => {
-    // Set default date to today
     document.getElementById('fechaAcuerdo').valueAsDate = new Date();
-    loadData(); // Attempt to load saved data on page load
-    toggleFormSections(); // Initial section visibility (will be called again by loadData if data exists)
-    loadDynamicFormClauses(); // Load initial dynamic clauses for the default type (will be called again by loadData if data exists)
-    updatePreview(); // Initial preview update (will be called again by loadData if data exists)
+    loadData(); 
+    toggleFormSections(); 
+    loadDynamicFormClauses(); 
+    updatePreview(); 
 });

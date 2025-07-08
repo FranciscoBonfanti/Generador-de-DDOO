@@ -50,12 +50,10 @@ select.form-select:focus {
     color: #343a40;
 }
 
-/* Secciones con borde inferior para separar grupos */
 .border-bottom {
     border-color: #dee2e6 !important;
 }
 
-/* Editable clausulas con borde y scroll si crece */
 #editable-clausulas {
     border: 1px solid #ced4da;
     border-radius: 0.375rem;
@@ -130,7 +128,6 @@ select.form-select:focus {
     color: #adb5bd;
 }
 
-/* Responsividad: en móviles, ajusta padding y tamaño */
 @media (max-width: 767.98px) {
     .bg-white.p-4.p-sm-5.rounded.shadow {
         padding: 2rem 1.5rem !important;
