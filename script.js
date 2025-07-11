@@ -42,17 +42,11 @@ const documentTemplates = {
     },
     primeraProvidencia: {
         formFields: ['campoConsumidorDenunciante', 'campoConciliador'], 
-        intro: (data) => `Ref. VUF N.º ${data.expediente || '[Expediente]'} “XXX c/ YYY s/ Presunta Infracción a la Ley 24240”\nSanta Fe, “Cuna de la Constitución Nacional”, ${data.fecha.day} de ${data.fecha.month} de ${data.fecha.year}. Vista la denuncia efectuada por el Sr. ${data.consumidorDenunciante || '[Nombre Consumidor Denunciante]'}, y resultando competente esta Dirección General de Comercio Interior y Servicios como autoridad de aplicación de la Ley 24240 en el ámbito de la Provincia de Santa Fe, se abre la instancia conciliatoria, como primer tramo del procedimiento administrativo. Téngase presente que el correo electrónico consignado en la denuncia será considerado como domicilio electrónico del consumidor y sólo en caso de resultar imposible el diligenciamiento de las notificaciones por ese medio, se procederá a la notificación en formato papel al domicilio postal.`,
+        intro: (data) => `Ref. VUF N.º ${data.expediente || '[Expediente]'} " XXX c/ ${data.empresaNombre } s/ Presunta Infracción a la Ley 24240” Santa Fe, “Cuna de la Constitución Nacional”, ${data.fecha.day} de ${data.fecha.month} de ${data.fecha.year}. Vista la denuncia efectuada por el Sr. ${data.consumidorDenunciante || '[Nombre Consumidor Denunciante]'}, y resultando competente esta Dirección General de Comercio Interior y Servicios como autoridad de aplicación de la Ley 24240 en el ámbito de la Provincia de Santa Fe, se abre la instancia conciliatoria, como primer tramo del procedimiento administrativo. Téngase presente que el correo electrónico consignado en la denuncia será considerado como domicilio electrónico del consumidor y sólo en caso de resultar imposible el diligenciamiento de las notificaciones por ese medio, se procederá a la notificación en formato papel al domicilio postal. Asígnese como conciliador en las presentes actuaciones a ${data.conciliadorAsignado || '[Conciliador Asignado]'}. Infórmese al consumidor y al proveedor que esta instancia tendrá por finalidad la composición de los intereses de las partes a través de un acuerdo y que se trata de una etapa confidencial y no obligatoria del trámite administrativo, que se realiza conforme lo normado en el art. 43 de la Ley 24240. A estos fines, hágase saber a la firma YYY que podrá efectuar su propuesta conciliatoria en el plazo de cinco días hábiles administrativos contados a partir de la recepción de la presente. En tal caso, deberá efectuar su ofrecimiento en formato digital, con firma electrónica o digital, enviándolo a la casilla de correo... ${data.empresaMail}. Deberá constituir domicilio electrónico en su primera presentación y acreditar la representación que se invoque mediante el instrumento legal correspondiente (acta de constitución, contrato social, acta de designación de autoridades, poder o procura, etc) debidamente digitalizado, bajo apercibimientos de ley (arts. 2, 5, ss y cc Dec. 4174/2015 y Dec. 400/2024). ágase saber que el plazo otorgado para la presentación no lo exime del deber de cumplimiento oportuno de la prestación que pudiere corresponder. El transcurso del plazo sin que el proveedor efectúe propuesta conciliatoria, conllevará la apertura de la instrucción sumarial para la investigación y eventual sanción de las posibles infracciones que pudieran derivarse de la denuncia que da lugar a las presentes actuaciones (arts. 45, 47, ss y cc de la Ley 24240).`,
         title: '', 
         header: getCommonHeader(),
         footer: 'Notifíquese.',
-        clauses: [
-            { id: 'asignacionConciliador', title: 'ASÍGNESE COMO CONCILIADOR', editable: false, defaultText: (data) => `Asígnese como conciliador en las presentes actuaciones a ${data.conciliadorAsignado || '[Conciliador Asignado]'}. Infórmese al consumidor y al proveedor que esta instancia tendrá por finalidad la composición de los intereses de las partes a través de un acuerdo y que se trata de una etapa confidencial y no obligatoria del trámite administrativo, que se realiza conforme lo normado en el art. 43 de la Ley 24240. A estos fines, hágase saber a la firma YYY que podrá efectuar su propuesta conciliatoria en el plazo de cinco días hábiles administrativos contados a partir de la recepción de la presente.` },
-            { id: 'formatoDigital', title: 'FORMATO DIGITAL', editable: false, defaultText: 'En tal caso, deberá efectuar su ofrecimiento en formato digital, con firma electrónica o digital, enviándolo a la casilla de correo xxx@santafe.gov.ar.' },
-            { id: 'constituirDomicilio', title: 'CONSTITUIR DOMICILIO', editable: false, defaultText: 'Deberá constituir domicilio electrónico en su primera presentación y acreditar la representación que se invoque mediante el instrumento legal correspondiente (acta de constitución, contrato social, acta de designación de autoridades, poder o procura, etc) debidamente digitalizado, bajo apercibimientos de ley (arts. 2, 5, ss y cc Dec. 4174/2015 y Dec. 400/2024).' },
-            { id: 'noEximeCumplimiento', title: 'NO EXIME CUMPLIMIENTO', editable: false, defaultText: 'Hágase saber que el plazo otorgado para la presentación no lo exime del deber de cumplimiento oportuno de la prestación que pudiere corresponder.' },
-            { id: 'aperturaSumarial', title: 'APERTURA SUMARIAL', editable: false, defaultText: 'El transcurso del plazo sin que el proveedor efectúe propuesta conciliatoria, conllevará la apertura de la instrucción sumarial para la investigación y eventual sanción de las posibles infracciones que pudieran derivarse de la denuncia que da lugar a las presentes actuaciones (arts. 45, 47, ss y cc de la Ley 24240).' }
-        ]
+        clauses: []
     },
     cedulaPrimerDecreto: {
         formFields: ['seccionCedula', 'campoConsumidorDenunciante', 'campoConciliador'], // Only these fields are relevant
@@ -135,14 +129,17 @@ function getFormData() {
         fecha: fecha,
         expediente: document.getElementById('expediente').value,
         consumidorDenunciante: document.getElementById('consumidorDenunciante').value,
+        empresaMail: document.getElementById('empresaMail').value || '',
+        empresaNombre: document.getElementById('empresaNombre').value,
         conciliadorAsignado: document.getElementById('conciliadorAsignado').value,
         empresa: {
             apoderado: document.getElementById('empresaApoderado').value,
             dni: document.getElementById('empresaDNI').value,
-            nombre: document.getElementById('empresaNombre').value,
+            nombre: document.getElementById('empresaNombre').value || '',
             cuit: document.getElementById('empresaCUIT').value,
             domicilio: document.getElementById('empresaDomicilio').value,
             ciudad: document.getElementById('empresaCiudad').value,
+            mail: document.getElementById('empresaMail').value || '' 
         },
         consumidor: {
             nombre: document.getElementById('consumidorNombre').value,
