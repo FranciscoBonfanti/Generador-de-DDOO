@@ -2,10 +2,6 @@ const { jsPDF } = window.jspdf;
 const form = document.getElementById('agreementForm');
 const agreementTypeSelect = document.getElementById('agreementType');
 
-
-
-
-
 // --- Helper function for date formatting ---
 function getFormattedDate(dateInput) {
     let date = { day: ' ', month: ' ', year: ' ' };
@@ -29,7 +25,7 @@ function getCommonHeader() {
 const documentTemplates = {
     acuerdoConciliatorio: {
         formFields: ['seccionEmpresa', 'seccionConsumidor', 'seccionClausulas', 'campoConsumidorDenunciante', 'campoConciliador'],
-        intro: (data) => `En la ciudad de ${data.ciudadAcuerdo || '[Ciudad]'}, a los ${data.fecha.day} días del mes de ${data.fecha.month} de ${data.fecha.year}, entre el Sr. ${data.empresa.apoderado || '[Apoderado]'}, DNI ${data.empresa.dni || '[DNI Apoderado]'}, en su carácter de apoderado de ${data.empresa.nombre || '[Razón Social]'}, CUIT ${data.empresa.cuit || '[CUIT]'}, con domicilio en calle ${data.empresa.domicilio || '[Domicilio Empresa]'} de la ciudad de ${data.empresa.ciudad || '[Ciudad Empresa]'}, por una parte, en adelante LA EMPRESA; y por la otra, el Sr. ${data.consumidor.nombre || '[Nombre Consumidor]'}, DNI ${data.consumidor.dni || '[DNI Consumidor]'}, con domicilio en calle ${data.consumidor.domicilio || '[Domicilio Consumidor]'} de la ciudad de ${data.consumidor.ciudad || '[Ciudad Consumidor]'}, en las actuaciones caratuladas “VUF ${data.expediente || '[Expediente]'} “XXX c/ YYY s/ Presunta Infracción a la Ley 24240”, convienen en celebrar el presente ACUERDO CONCILIATORIO, sujeto a las siguientes cláusulas:`,
+        intro: (data) => `En la ciudad de ${data.ciudadAcuerdo || '[Ciudad]'}, a los ${data.fecha.day} días del mes de ${data.fecha.month} de ${data.fecha.year}, entre el Sr. ${data.empresa.apoderado || '[Apoderado]'}, DNI ${data.empresa.dni || '[DNI Apoderado]'}, en su carácter de apoderado de ${data.empresa.nombre || '[Razón Social]'}, CUIT ${data.empresa.cuit || '[CUIT]'}, con domicilio en calle ${data.empresa.domicilio || '[Domicilio Empresa]'} de la ciudad de ${data.empresa.ciudad || '[Ciudad Empresa]'}, por una parte, en adelante LA EMPRESA; y por la otra, el Sr. ${data.consumidor.nombre || '[Nombre Consumidor]'}, DNI ${data.consumidor.dni || '[DNI Consumidor]'}, con domicilio en calle ${data.consumidor.domicilio || '[Domicilio Consumidor]'} de la ciudad de ${data.consumidor.ciudad || '[Ciudad Consumidor]'}, en las actuaciones caratuladas “VUF ${data.expediente || '[Expediente]'} “${data.consumidor.nombre || '[Nombre Consumidor]'} c/ ${data.empresa.nombre || '[Nombre Empresa]'} s/ Presunta Infracción a la Ley 24240”, convienen en celebrar el presente ACUERDO CONCILIATORIO, sujeto a las siguientes cláusulas:`,
         title: 'ACUERDO CONCILIATORIO',
         header: getCommonHeader(),
         footer: `De plena conformidad, siendo el presente fiel reflejo de la voluntad de las partes, se perfecciona el presente acuerdo en el lugar y fecha arriba indicados.----------------------------`,
@@ -37,12 +33,12 @@ const documentTemplates = {
             { id: 'primera', title: 'PRIMERA', editable: true, placeholder: 'La EMPRESA ofrece, y el CONSUMIDOR acepta, ....', defaultText: (data) => data.clausulas.primera || 'La EMPRESA ofrece, y el CONSUMIDOR acepta, ....' },
             { id: 'segunda', title: 'SEGUNDA', editable: true, placeholder: 'Detalles adicionales...', defaultText: (data) => data.clausulas.segunda || '...' },
             { id: 'tercera', title: 'TERCERA', editable: false, defaultText: 'Cumplido en tiempo y forma el presente acuerdo, nada tendrán que reclamarse recíprocamente las partes por ningún concepto vinculado a lo que fuera materia de la denuncia tramitada por ante la Dirección General de Comercio Interior y Servicios, Ministerio de Desarrollo Productivo, de la Provincia de Santa Fe.-------------------------------' },
-            { id: 'cuarta', title: 'CUARTA', editable: false, defaultText: (data) => `Las partes, de común acuerdo, solicitan a la autoridad de aplicación proceda a la homologación del presente acuerdo y, oportunamente, al archivo de las actuaciones caratuladas “VUF ${data.expediente || '[Expediente]'} “XXX c/ YYY s/ Presunta Infracción a la Ley 24240”.-----------------` }
+            { id: 'cuarta', title: 'CUARTA', editable: false, defaultText: (data) => `Las partes, de común acuerdo, solicitan a la autoridad de aplicación proceda a la homologación del presente acuerdo y, oportunamente, al archivo de las actuaciones caratuladas “VUF ${data.expediente || '[Expediente]'} “${data.consumidor.nombre || '[Nombre Consumidor]'} c/ ${data.empresa.nombre || '[Nombre Empresa]'} s/ Presunta Infracción a la Ley 24240”.-----------------` }
         ]
     },
     primeraProvidencia: {
         formFields: ['campoConsumidorDenunciante', 'campoConciliador'], 
-        intro: (data) => `Ref. VUF N.º ${data.expediente || '[Expediente]'} " XXX c/ ${data.empresaNombre } s/ Presunta Infracción a la Ley 24240” Santa Fe, “Cuna de la Constitución Nacional”, ${data.fecha.day} de ${data.fecha.month} de ${data.fecha.year}. Vista la denuncia efectuada por el Sr. ${data.consumidorDenunciante || '[Nombre Consumidor Denunciante]'}, y resultando competente esta Dirección General de Comercio Interior y Servicios como autoridad de aplicación de la Ley 24240 en el ámbito de la Provincia de Santa Fe, se abre la instancia conciliatoria, como primer tramo del procedimiento administrativo. Téngase presente que el correo electrónico consignado en la denuncia será considerado como domicilio electrónico del consumidor y sólo en caso de resultar imposible el diligenciamiento de las notificaciones por ese medio, se procederá a la notificación en formato papel al domicilio postal. Asígnese como conciliador en las presentes actuaciones a ${data.conciliadorAsignado || '[Conciliador Asignado]'}. Infórmese al consumidor y al proveedor que esta instancia tendrá por finalidad la composición de los intereses de las partes a través de un acuerdo y que se trata de una etapa confidencial y no obligatoria del trámite administrativo, que se realiza conforme lo normado en el art. 43 de la Ley 24240. A estos fines, hágase saber a la firma YYY que podrá efectuar su propuesta conciliatoria en el plazo de cinco días hábiles administrativos contados a partir de la recepción de la presente. En tal caso, deberá efectuar su ofrecimiento en formato digital, con firma electrónica o digital, enviándolo a la casilla de correo... ${data.empresaMail}. Deberá constituir domicilio electrónico en su primera presentación y acreditar la representación que se invoque mediante el instrumento legal correspondiente (acta de constitución, contrato social, acta de designación de autoridades, poder o procura, etc) debidamente digitalizado, bajo apercibimientos de ley (arts. 2, 5, ss y cc Dec. 4174/2015 y Dec. 400/2024). ágase saber que el plazo otorgado para la presentación no lo exime del deber de cumplimiento oportuno de la prestación que pudiere corresponder. El transcurso del plazo sin que el proveedor efectúe propuesta conciliatoria, conllevará la apertura de la instrucción sumarial para la investigación y eventual sanción de las posibles infracciones que pudieran derivarse de la denuncia que da lugar a las presentes actuaciones (arts. 45, 47, ss y cc de la Ley 24240).`,
+        intro: (data) => `Ref. VUF N.º ${data.expediente || '[Expediente]'} " ${data.consumidor.nombre || '[Nombre Consumidor]'} c/ ${data.empresa.nombre || '[Nombre Empresa]'} s/ Presunta Infracción a la Ley 24240” Santa Fe, “Cuna de la Constitución Nacional”, ${data.fecha.day} de ${data.fecha.month} de ${data.fecha.year}. Vista la denuncia efectuada por el Sr. ${data.consumidorDenunciante || '[Nombre Consumidor Denunciante]'}, y resultando competente esta Dirección General de Comercio Interior y Servicios como autoridad de aplicación de la Ley 24240 en el ámbito de la Provincia de Santa Fe, se abre la instancia conciliatoria, como primer tramo del procedimiento administrativo. Téngase presente que el correo electrónico consignado en la denuncia será considerado como domicilio electrónico del consumidor y sólo en caso de resultar imposible el diligenciamiento de las notificaciones por ese medio, se procederá a la notificación en formato papel al domicilio postal. Asígnese como conciliador en las presentes actuaciones a ${data.conciliadorAsignado || '[Conciliador Asignado]'}. Infórmese al consumidor y al proveedor que esta instancia tendrá por finalidad la composición de los intereses de las partes a través de un acuerdo y que se trata de una etapa confidencial y no obligatoria del trámite administrativo, que se realiza conforme lo normado en el art. 43 de la Ley 24240. A estos fines, hágase saber a la firma ${data.empresa.nombre || '[Nombre Empresa]'} que podrá efectuar su propuesta conciliatoria en el plazo de cinco días hábiles administrativos contados a partir de la recepción de la presente. En tal caso, deberá efectuar su ofrecimiento en formato digital, con firma electrónica o digital, enviándolo a la casilla de correo ${data.empresaMail || '[Email Defensa Cosumidor]'}. Deberá constituir domicilio electrónico en su primera presentación y acreditar la representación que se invoque mediante el instrumento legal correspondiente (acta de constitución, contrato social, acta de designación de autoridades, poder o procura, etc) debidamente digitalizado, bajo apercibimientos de ley (arts. 2, 5, ss y cc Dec. 4174/2015 y Dec. 400/2024). ágase saber que el plazo otorgado para la presentación no lo exime del deber de cumplimiento oportuno de la prestación que pudiere corresponder. El transcurso del plazo sin que el proveedor efectúe propuesta conciliatoria, conllevará la apertura de la instrucción sumarial para la investigación y eventual sanción de las posibles infracciones que pudieran derivarse de la denuncia que da lugar a las presentes actuaciones (arts. 45, 47, ss y cc de la Ley 24240).`,
         title: '', 
         header: getCommonHeader(),
         footer: 'Notifíquese.',
@@ -52,7 +48,7 @@ const documentTemplates = {
         formFields: ['seccionCedula', 'campoConsumidorDenunciante', 'campoConciliador'], // Only these fields are relevant
         intro: (data) => {
             // Reconstruct the full Providencia text based on the Primera Providencia template and current data
-            const providenciaIntro = `Ref. VUF N.º ${data.expediente || '[Expediente]'} “XXX c/ YYY s/ Presunta Infracción a la Ley 24240”. Santa Fe, “Cuna de la Constitución Nacional”, ${data.fecha.day} de ${data.fecha.month} de ${data.fecha.year}. Vista la denuncia efectuada por el Sr. ${data.consumidorDenunciante || '[Nombre Consumidor Denunciante]'}, y resultando competente esta Dirección General de Comercio Interior y Servicios como autoridad de aplicación de la Ley 24240 en el ámbito de la Provincia de Santa Fe, se abre la instancia conciliatoria, como primer tramo del procedimiento administrativo. Téngase presente que el correo electrónico consignado en la denuncia será considerado como domicilio electrónico del consumidor y sólo en caso de resultar imposible el diligenciamiento de las notificaciones por ese medio, se procederá a la notificación en formato papel al domicilio postal.`;
+            const providenciaIntro = `Ref. VUF N.º ${data.expediente || '[Expediente]'} “${data.consumidor.nombre || '[Nombre Consumidor]'} c/ ${data.empresa.nombre || '[Nombre Empresa]'} s/ Presunta Infracción a la Ley 24240”. Santa Fe, “Cuna de la Constitución Nacional”, ${data.fecha.day} de ${data.fecha.month} de ${data.fecha.year}. Vista la denuncia efectuada por el Sr. ${data.consumidorDenunciante || '[Nombre Consumidor Denunciante]'}, y resultando competente esta Dirección General de Comercio Interior y Servicios como autoridad de aplicación de la Ley 24240 en el ámbito de la Provincia de Santa Fe, se abre la instancia conciliatoria, como primer tramo del procedimiento administrativo. Téngase presente que el correo electrónico consignado en la denuncia será considerado como domicilio electrónico del consumidor y sólo en caso de resultar imposible el diligenciamiento de las notificaciones por ese medio, se procederá a la notificación en formato papel al domicilio postal.`;
 
             const providenciaClauses = documentTemplates.primeraProvidencia.clauses.map(clause => {
                 let clauseText = typeof clause.defaultText === 'function' ? clause.defaultText(data) : clause.defaultText;
@@ -64,7 +60,7 @@ const documentTemplates = {
 
             const fullProvidenciaText = `${providenciaIntro} ${providenciaClauses} ${providenciaFooter}`;
             
-            return `SEÑORES: ${data.cedulaNombre || '[Nombre]'}\nDOMICILIO: ${data.cedulaDomicilio || '[Domicilio]'}\nLOCALIDAD: ${data.cedulaLocalidad || '[Localidad]'} – CP ${data.cedulaCP || '[CP]'}\nPROVINCIA: ${data.cedulaProvincia || '[Provincia]'}\n\nSanta Fe, ${data.fecha.day} de ${data.fecha.month} de ${data.fecha.year}\n\nSe hace saber a Ud. que en el expediente VUF ${data.expediente || '[Expediente]'} “Xxx c/ Yyyy. s/ presunta infracción a la Ley 24240” en trámite por ante la Dirección General de Comercio Interior y Servicios del Ministerio Desarrollo Productivo de la Provincia de Santa Fe se ha dispuesto lo siguiente: “${fullProvidenciaText}”. Se adjunta copia del reclamo en su parte pertinente. Queda Ud. debidamente notificado. Saludo a Ud. atentamente.`;
+            return `SEÑORES: ${data.empresa.nombre || '[Nombre]'}\nDOMICILIO: ${data.empresa.domicilio || '[Domicilio]'}\nLOCALIDAD: ${data.empresa.ciudad || '[Localidad]'} – CP ${data.empresa.cp || '[CP]'}\nPROVINCIA: ${data.empresa.provincia || '[Provincia]'}\n\nSanta Fe, ${data.fecha.day} de ${data.fecha.month} de ${data.fecha.year}\n\nSe hace saber a Ud. que en el expediente VUF ${data.expediente || '[Expediente]'} “${data.consumidor.nombre || '[Nombre Consumidor]'} c/ ${data.empresa.nombre || '[Nombre Empresa]'}. s/ presunta infracción a la Ley 24240” en trámite por ante la Dirección General de Comercio Interior y Servicios del Ministerio Desarrollo Productivo de la Provincia de Santa Fe se ha dispuesto lo siguiente: “${fullProvidenciaText}”. Se adjunta copia del reclamo en su parte pertinente. Queda Ud. debidamente notificado. Saludo a Ud. atentamente.`;
         },
         title: 'CÉDULA',
         header: getCommonHeader(),
@@ -75,33 +71,6 @@ const documentTemplates = {
             Provincia de Santa Fe
         `,
         clauses: []
-    },
-    standard: { // User's new standard agreement type
-        formFields: ['seccionEmpresa', 'seccionConsumidor', 'seccionClausulas'],
-        intro: (data) => `En la ciudad de ${data.ciudadAcuerdo || '[Ciudad]'}, a los ${data.fecha.day} días del mes de ${data.fecha.month} de ${data.fecha.year}, entre el Sr. ${data.empresa.apoderado || '[Apoderado]'}, DNI ${data.empresa.dni || '[DNI Apoderado]'}, en su carácter de apoderado de ${data.empresa.nombre || '[Razón Social]'}, CUIT ${data.empresa.cuit || '[CUIT]'}, con domicilio en calle ${data.empresa.domicilio || '[Domicilio Empresa]'} de la ciudad de ${data.empresa.ciudad || '[Ciudad Empresa]'}, por una parte, en adelante LA EMPRESA; y por la otra, el Sr. ${data.consumidor.nombre || '[Nombre Consumidor]'}, DNI ${data.consumidor.dni || '[DNI Consumidor]'}, con domicilio en calle ${data.consumidor.domicilio || '[Domicilio Consumidor]'} de la ciudad de ${data.consumidor.ciudad || '[Ciudad Consumidor]'}, en las actuaciones caratuladas "VUF. ${data.expediente || '[Expediente]'} c/ ${data.empresa.nombre || '[Razón Social]'} s/ Presunta Infracción a la Ley 24240", convienen en celebrar el presente ACUERDO CONCILIATORIO, sujeto a las siguientes cláusulas:`,
-        title: 'ACUERDO CONCILIATORIO',
-        header: getCommonHeader(),
-        footer: `De plena conformidad, siendo el presente fiel reflejo de la voluntad de las partes, se perfecciona el presente acuerdo en el lugar y fecha arriba indicados.`,
-        clauses: [
-            { id: 'primera', title: 'PRIMERA', editable: true, placeholder: 'La EMPRESA ofrece...', defaultText: (data) => data.clausulas.primera || 'La EMPRESA ofrece...' },
-            { id: 'segunda', title: 'SEGUNDA', editable: true, placeholder: 'Detalles adicionales...', defaultText: (data) => data.clausulas.segunda || 'Detalles adicionales...' },
-            { id: 'tercera', title: 'TERCERA', editable: false, defaultText: 'Cumplido en tiempo y forma el presente acuerdo, nada tendrán que reclamarse recíprocamente las partes por ningún concepto vinculado a lo que fuera materia de la denuncia tramitada por ante la Dirección General de Comercio Interior y Servicios, Ministerio de Desarrollo Productivo, de la Provincia de Santa Fe.' },
-            { id: 'cuarta', title: 'CUARTA', editable: false, defaultText: (data) => `Las partes, de común acuerdo, solicitan a la autoridad de aplicación proceda a la homologación del presente acuerdo y, oportunamente, al archivo de las actuaciones caratuladas "VUF. ${data.expediente || '[Expediente]'} c/ ${data.empresa.nombre || '[Razón Social]'} s/ Presunta Infracción a la Ley 24240".` }
-        ]
-    },
-    warranty: { // User's new warranty agreement type
-        formFields: ['seccionEmpresa', 'seccionConsumidor', 'seccionClausulas'],
-        intro: (data) => `En la ciudad de ${data.ciudadAcuerdo || '[Ciudad]'}, a los ${data.fecha.day} días del mes de ${data.fecha.month} de ${data.fecha.year}, entre la empresa ${data.empresa.nombre || '[Razón Social]'} (CUIT ${data.empresa.cuit || '[CUIT]'}) representada por su apoderado/a ${data.empresa.apoderado || '[Apoderado]'}, DNI ${data.empresa.dni || '[DNI Apoderado]'}, con domicilio en ${data.empresa.domicilio || '[Domicilio Empresa]'} de ${data.empresa.ciudad || '[Ciudad Empresa]'}, y el/la consumidor/a ${data.consumidor.nombre || '[Nombre Consumidor]'}, DNI ${data.consumidor.dni || '[DNI Consumidor]'}, con domicilio en ${data.consumidor.domicilio || '[Domicilio Consumidor]'} de ${data.consumidor.ciudad || '[Ciudad Consumidor]'}, en el marco del expediente N° VUF. ${data.expediente || '[Expediente]'}, acuerdan el siguiente CONCILIATORIO DE GARANTÍA:`,
-        title: 'CONCILIATORIO DE GARANTÍA',
-        header: getCommonHeader(),
-        footer: `De plena conformidad, siendo el presente fiel reflejo de la voluntad de las partes, se perfecciona el presente acuerdo en el lugar y fecha arriba indicados.`,
-        clauses: [
-            { id: 'primera', title: 'PRIMERA', editable: true, placeholder: 'La EMPRESA se compromete a brindar una garantía extendida por...', defaultText: (data) => data.clausulas.primera || 'La EMPRESA se compromete a brindar una garantía extendida por...' },
-            { id: 'segunda', title: 'SEGUNDA', editable: true, placeholder: 'Condiciones específicas de la garantía...', defaultText: (data) => data.clausulas.segunda || 'Condiciones específicas de la garantía...' },
-            { id: 'tercera', title: 'TERCERA', editable: false, defaultText: 'El presente acuerdo extingue cualquier reclamo futuro relacionado con el vicio o defecto original del producto/servicio.' },
-            { id: 'cuarta', title: 'CUARTA', editable: false, defaultText: (data) => `Ambas partes solicitan la homologación del presente y el archivo del expediente VUF. ${data.expediente || '[Expediente]'}.` },
-            { id: 'quinta', title: 'QUINTA', editable: true, placeholder: 'Cláusula adicional específica de garantía (Ej: Plazo para hacer valer la garantía)...', defaultText: (data) => data.clausulas.quinta || 'Cláusula adicional específica de garantía (Ej: Plazo para hacer valer la garantía)...' }
-        ]
     }
 };
 
@@ -130,7 +99,7 @@ function getFormData() {
         expediente: document.getElementById('expediente').value,
         consumidorDenunciante: document.getElementById('consumidorDenunciante').value,
         empresaMail: document.getElementById('empresaMail').value || '',
-        empresaNombre: document.getElementById('empresaNombre').value,
+        empresaNombre: document.getElementById('empresaNombre').value || '',
         conciliadorAsignado: document.getElementById('conciliadorAsignado').value,
         empresa: {
             apoderado: document.getElementById('empresaApoderado').value,
@@ -139,6 +108,8 @@ function getFormData() {
             cuit: document.getElementById('empresaCUIT').value,
             domicilio: document.getElementById('empresaDomicilio').value,
             ciudad: document.getElementById('empresaCiudad').value,
+            provincia: document.getElementById('empresaProvincia').value || '',
+            cp: document.getElementById('empresaCP').value || '',
             mail: document.getElementById('empresaMail').value || '' 
         },
         consumidor: {
@@ -424,6 +395,7 @@ function loadData() {
             document.getElementById('ciudadAcuerdo').value = savedData.ciudadAcuerdo || 'Santa Fe';
             // Handle date separately to ensure it's set correctly
             if (savedData.fecha && savedData.fecha.year && savedData.fecha.month && savedData.fecha.day) {
+                const year = savedData.fecha.year;
                 const day = String(savedData.fecha.day).padStart(2, '0');
                 const monthIndex = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"].indexOf(savedData.fecha.month);
                 const month = String(monthIndex + 1).padStart(2, '0'); // Convert month name to number
