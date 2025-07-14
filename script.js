@@ -71,6 +71,41 @@ const documentTemplates = {
             Provincia de Santa Fe
         `,
         clauses: []
+    },
+    denunciadoAudiencia: {
+        formFields: ['seccionCedula', 'campoConsumidorDenunciante', 'campoConciliador'], 
+        intro: (data) => {
+            // Reconstruct the full Providencia text based on the Primera Providencia template and current data
+            const providenciaIntro = `Ref. VUF N.º ${data.expediente || '[Expediente]'} “${data.consumidor.nombre || '[Nombre Consumidor]'} c/ ${data.empresa.nombre || '[Nombre Empresa]'} s/ Presunta Infracción a la Ley 24240”. Santa Fe, “Cuna de la Constitución Nacional”, ${data.fecha.day} de ${data.fecha.month} de ${data.fecha.year}. Vista la denuncia efectuada por el Sr. ${data.consumidorDenunciante || '[Nombre Consumidor Denunciante]'}, y resultando competente esta Dirección General de Comercio Interior y Servicios como autoridad de aplicación de la Ley 24240 en el ámbito de la Provincia de Santa Fe, se abre la instancia conciliatoria, como primer tramo del procedimiento administrativo. Téngase presente que el correo electrónico consignado en la denuncia será considerado como domicilio electrónico del consumidor y sólo en caso de resultar imposible el diligenciamiento de las notificaciones por ese medio, se procederá a la notificación en formato papel al domicilio postal.`;
+
+            const providenciaClauses = documentTemplates.primeraProvidencia.clauses.map(clause => {
+                let clauseText = typeof clause.defaultText === 'function' ? clause.defaultText(data) : clause.defaultText;
+                // For Providencia inside Cedula, we don't need the clause titles like "ASIGNACIÓN CONCILIADOR"
+                return clauseText;
+            }).join(' '); 
+
+            const providenciaFooter = 'Notifíquese.';
+
+            const fullProvidenciaText = `${providenciaIntro} ${providenciaClauses} ${providenciaFooter}`;
+
+            return `SEÑORES: ${data.empresa.nombre || '[Nombre]'}\nDOMICILIO: ${data.empresa.domicilio || '[Domicilio]'}\nLOCALIDAD: ${data.empresa.ciudad || '[Localidad]'} – CP ${data.empresa.cp || '[CP]'}\nPROVINCIA: ${data.empresa.provincia || '[Provincia]'}\n\nSanta Fe, ${data.fecha.day} de ${data.fecha.month} de ${data.fecha.year}\n\nSe hace saber a Ud. que en el expediente VUF ${data.expediente || '[Expediente]'} “${data.consumidor.nombre || '[Nombre Consumidor]'} c/ ${data.empresa.nombre || '[Nombre Empresa]'}. s/ presunta infracción a la Ley 24240” en trámite por ante la Dirección General de Comercio Interior y Servicios del Ministerio Desarrollo Productivo de la Provincia de Santa Fe se ha dispuesto lo siguiente: “${fullProvidenciaText}”. Se ha dispuesto convocar a las partes para audiencia de conciliación, conforme lo normado en el art. 43 de la Ley 24240. La misma se celebrará de manera virtual, el día ${data.fecha.day} de ${data.fecha.month} de ${data.fecha.year} a las ${data.horaAudiencia || '[Hora Audiencia]'} hs,  debiendo Ud. conectarse al vínculo de la videollamada: ${data.empresa.meet || '[Enlace Meet]'} para comparecer a la audiencia.
+	Como recaudo, se transcribe la providencia que así lo ordena: “Ref. VUF N.º ${data.expediente || '[Expediente]'} “${data.consumidor.nombre || '[Nombre Consumidor]'} c/ ${data.empresa.nombre || '[Nombre Empresa]'} s/ Presunta Infracción a la Ley 24240”. Santa Fe, “Cuna de la Constitución Nacional”, ${data.fecha.day} de ${data.fecha.month} de ${data.fecha.year}. Vistas constancias de las presentes actuaciones y atendiendo a razones de oportunidad y conveniencia que aconsejan la celebración de una audiencia para una mejor conciliación, fíjese fecha de audiencia para el día ${data.fecha.day} de ${data.fecha.month} de ${data.fecha.year} a las ${data.horaAudiencia || '[Hora Audiencia]'} horas. La misma se celebrará de manera virtual, debiendo las partes conectarse al vínculo ${data.empresa.meet || '[Enlace Meet]'} Infórmese a las partes que las audiencias sólo se suspenden por caso fortuito o fuerza mayor, debiendo ser acreditado en el plazo de cinco días. Hágase saber al proveedor que su ausencia injustificada conllevará la apertura de la instrucción sumarial para la investigación de posibles infracciones que pudieran derivarse del reclamo iniciado; y al consumidor que su ausencia injustificada hará presumir su desistimiento y ulterior archivo de las presentes actuaciones. Notifíquese.” Fdo. [FIRMADO], DGCIYS – SCIYS, Ministerio de Desarrollo Productivo, Provincia de Santa Fe.
+	Se hace saber a Uds. que en el caso excepcional de no contar con los medios necesarios para acceder a la audiencia virtual, deberá presentar la correspondiente declaración jurada en el plazo perentorio e improrrogable de cinco (5) días hábiles administrativos.
+	Se notifica a Ud. que las audiencias de conciliación son confidenciales y sólo se suspenden por caso fortuito o fuerza mayor. La acreditación de esta última deberá realizarse con un plazo máximo de hasta cinco (5) días hábiles administrativos posteriores a la fecha de la audiencia.
+	La incomparencia injustificada conlleva la apertura de la instrucción sumarial para la investigación de posibles infracciones que pudieran derivarse del reclamo iniciado.
+ 	Queda Ud. debidamente notificado.
+	Saludo a Ud. atentamente.
+`;
+        },
+        title: 'Cédula Denunciado Audiencia',
+        header: getCommonHeader(),
+        footer: (data) => `
+            ${data.firmanteCedula || '[Firmante Cédula]'}
+            DGCIYS – SCIYS
+            Ministerio de Desarrollo Productivo
+            Provincia de Santa Fe
+        `,
+        clauses: []
     }
 };
 
@@ -110,7 +145,8 @@ function getFormData() {
             ciudad: document.getElementById('empresaCiudad').value,
             provincia: document.getElementById('empresaProvincia').value || '',
             cp: document.getElementById('empresaCP').value || '',
-            mail: document.getElementById('empresaMail').value || '' 
+            mail: document.getElementById('empresaMail').value || '',
+            meet: document.getElementById('empresaMeet').value || '' 
         },
         consumidor: {
             nombre: document.getElementById('consumidorNombre').value,

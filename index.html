@@ -6,14 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Generador de Documentos - Santa Fe Provincia</title>
     <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
     <link rel="stylesheet" href="./estilos.css" />
 </head>
 
 <body class="bg-light">
-
     <div class="container py-5">
         <div class="row g-5">
             <!-- Formulario -->
@@ -24,11 +24,11 @@
                             <svg width="50" height="50" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                                 <defs>
                                     <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="0%">
-                                        <stop offset="0%" style="stop-color:#FFC802" />
-                                        <stop offset="25%" style="stop-color:#FF7402" />
-                                        <stop offset="50%" style="stop-color:#FF6D7E" />
-                                        <stop offset="75%" style="stop-color:#E42153" />
-                                        <stop offset="100%" style="stop-color:#3C3AE5" />
+                                        <stop offset="0%" style="stop-color: #ffc802" />
+                                        <stop offset="25%" style="stop-color: #ff7402" />
+                                        <stop offset="50%" style="stop-color: #ff6d7e" />
+                                        <stop offset="75%" style="stop-color: #e42153" />
+                                        <stop offset="100%" style="stop-color: #3c3ae5" />
                                     </linearGradient>
                                 </defs>
                                 <g fill="url(#g)">
@@ -52,9 +52,18 @@
                         <div class="mb-4">
                             <h5 class="fw-semibold mb-2">Seleccione Tipo de Documento</h5>
                             <select id="agreementType" class="form-select">
-                                <option value="acuerdoConciliatorio">Acuerdo Conciliatorio</option>
-                                <option value="primeraProvidencia">Primera Providencia</option>
-                                <option value="cedulaPrimerDecreto">Cédula Primer Decreto</option>  
+                                <option value="acuerdoConciliatorio">
+                                    Acuerdo Conciliatorio
+                                </option>
+                                <option value="primeraProvidencia">
+                                    Primera Providencia
+                                </option>
+                                <option value="cedulaPrimerDecreto">
+                                    Cédula Primer Decreto
+                                </option>
+                                <option value="denunciadoAudiencia">
+                                    Cédula Denunciado Audiencia
+                                </option>
                             </select>
                         </div>
 
@@ -63,65 +72,66 @@
                             <div class="row g-3">
                                 <div class="col-sm-6">
                                     <label for="ciudadAcuerdo" class="form-label">Ciudad</label>
-                                    <input type="text" id="ciudadAcuerdo" value="Santa Fe" class="form-control">
+                                    <input type="text" id="ciudadAcuerdo" value="Santa Fe" class="form-control" />
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="fechaAcuerdo" class="form-label">Fecha</label>
-                                    <input type="date" id="fechaAcuerdo" class="form-control">
+                                    <input type="date" id="fechaAcuerdo" class="form-control" />
                                 </div>
                                 <div class="col-12">
                                     <label for="expediente" class="form-label">N° Expediente (VUF)</label>
                                     <input type="text" id="expediente" placeholder="Ej: 00101-0123456-7"
-                                        class="form-control">
+                                        class="form-control" />
                                 </div>
                                 <div class="col-12" id="campoConsumidorDenunciante">
                                     <label for="consumidorDenunciante" class="form-label">Nombre Consumidor
                                         Denunciante</label>
-                                    <input type="text" id="consumidorDenunciante" class="form-control">
+                                    <input type="text" id="consumidorDenunciante" class="form-control" />
                                 </div>
                                 <div class="col-12" id="campoConciliador">
                                     <label for="conciliadorAsignado" class="form-label">Conciliador Asignado</label>
-                                    <input type="text" id="conciliadorAsignado" class="form-control">
+                                    <input type="text" id="conciliadorAsignado" class="form-control" />
                                 </div>
                             </div>
                         </div>
 
                         <div class="border-bottom pb-4 mb-4" id="seccionEmpresa">
-                            <h5 class="fw-semibold mb-3">2. Datos de la Empresa / Proveedor</h5>
+                            <h5 class="fw-semibold mb-3">
+                                2. Datos de la Empresa / Proveedor
+                            </h5>
                             <div class="row g-3">
                                 <div class="col-sm-6">
                                     <label for="empresaApoderado" class="form-label">Nombre Apoderado</label>
-                                    <input type="text" id="empresaApoderado" class="form-control">
+                                    <input type="text" id="empresaApoderado" class="form-control" />
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="empresaDNI" class="form-label">DNI Apoderado</label>
-                                    <input type="text" id="empresaDNI" class="form-control">
+                                    <input type="text" id="empresaDNI" class="form-control" />
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="empresaNombre" class="form-label">Razón Social</label>
-                                    <input type="text" id="empresaNombre" class="form-control">
+                                    <input type="text" id="empresaNombre" class="form-control" />
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="empresaCUIT" class="form-label">CUIT</label>
-                                    <input type="text" id="empresaCUIT" class="form-control">
+                                    <input type="text" id="empresaCUIT" class="form-control" />
                                 </div>
                                 <div class="col-12">
                                     <label for="empresaDomicilio" class="form-label">Domicilio</label>
-                                    <input type="text" id="empresaDomicilio" class="form-control">
+                                    <input type="text" id="empresaDomicilio" class="form-control" />
                                 </div>
                                 <div class="col-12">
                                     <label for="empresaCiudad" class="form-label">Ciudad</label>
-                                    <input type="text" id="empresaCiudad" class="form-control">
+                                    <input type="text" id="empresaCiudad" class="form-control" />
                                 </div>
                                 <div class="col-12">
                                     <label for="empresaProvincia" class="form-label">Provincia</label>
-                                    <input type="text" id="empresaProvincia" class="form-control">
+                                    <input type="text" id="empresaProvincia" class="form-control" />
                                 </div>
                                 <div class="col-12">
                                     <label for="empresaCP" class="form-label">Código Postal</label>
-                                    <input type="text" id="empresaCP" class="form-control">
+                                    <input type="text" id="empresaCP" class="form-control" />
                                 </div>
-
                             </div>
                         </div>
 
@@ -130,19 +140,19 @@
                             <div class="row g-3">
                                 <div class="col-sm-6">
                                     <label for="consumidorNombre" class="form-label">Nombre Completo</label>
-                                    <input type="text" id="consumidorNombre" class="form-control">
+                                    <input type="text" id="consumidorNombre" class="form-control" />
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="consumidorDNI" class="form-label">DNI</label>
-                                    <input type="text" id="consumidorDNI" class="form-control">
+                                    <input type="text" id="consumidorDNI" class="form-control" />
                                 </div>
                                 <div class="col-12">
                                     <label for="consumidorDomicilio" class="form-label">Domicilio</label>
-                                    <input type="text" id="consumidorDomicilio" class="form-control">
+                                    <input type="text" id="consumidorDomicilio" class="form-control" />
                                 </div>
                                 <div class="col-12">
                                     <label for="consumidorCiudad" class="form-label">Ciudad</label>
-                                    <input type="text" id="consumidorCiudad" class="form-control">
+                                    <input type="text" id="consumidorCiudad" class="form-control" />
                                 </div>
                             </div>
                         </div>
@@ -152,46 +162,54 @@
                             <div class="row g-3">
                                 <div class="col-12">
                                     <label for="cedulaNombre" class="form-label">Nombre Receptor Cédula</label>
-                                    <input type="text" id="cedulaNombre" class="form-control">
+                                    <input type="text" id="cedulaNombre" class="form-control" />
                                 </div>
                                 <div class="col-12">
                                     <label for="cedulaDomicilio" class="form-label">Domicilio Receptor Cédula</label>
-                                    <input type="text" id="cedulaDomicilio" class="form-control">
+                                    <input type="text" id="cedulaDomicilio" class="form-control" />
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="cedulaLocalidad" class="form-label">Localidad</label>
-                                    <input type="text" id="cedulaLocalidad" class="form-control">
+                                    <input type="text" id="cedulaLocalidad" class="form-control" />
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="cedulaCP" class="form-label">Código Postal</label>
-                                    <input type="text" id="cedulaCP" class="form-control">
+                                    <input type="text" id="cedulaCP" class="form-control" />
                                 </div>
                                 <div class="col-12">
                                     <label for="cedulaProvincia" class="form-label">Provincia</label>
-                                    <input type="text" id="cedulaProvincia" class="form-control">
+                                    <input type="text" id="cedulaProvincia" class="form-control" />
                                 </div>
                                 <div class="col-12">
                                     <label for="firmanteCedula" class="form-label">Firmante Cédula</label>
-                                    <input type="text" id="firmanteCedula" class="form-control">
+                                    <input type="text" id="firmanteCedula" class="form-control" />
                                 </div>
                             </div>
                         </div>
 
-                                <div class="col-12 p-3">
-                                    <label for="empresaMail" class="form-label">Email</label>
-                                    <input type="email" id="empresaMail" class="form-control">
-                                </div>
+                        <div class="col-12 p-3">
+                            <label for="empresaMail" class="form-label">Email</label>
+                            <input type="email" id="empresaMail" class="form-control" />
+                        </div>
+                        <div class="col-12 p-3">
+                            <label for="empresaMeet" class="form-label">Enlace Meet</label>
+                            <input type="url" id="empresaMeet" class="form-control" />
+                        </div>
 
                         <div class="mb-4" id="seccionClausulas">
-                            <h5 class="fw-semibold mb-3">4. Cláusulas / Contenido Específico</h5>
-                            <div id="editable-clausulas" class="form-control" style="min-height: 100px;"></div>
+                            <h5 class="fw-semibold mb-3">
+                                4. Cláusulas / Contenido Específico
+                            </h5>
+                            <div id="editable-clausulas" class="form-control" style="min-height: 100px"></div>
                         </div>
 
                         <div class="d-grid gap-3 d-sm-flex justify-content-between">
-                            <button type="button" id="generatePdfBtn" class="btn btn-primary px-4 py-2 fw-bold">Generar
-                                PDF</button>
-                            <button type="button" id="saveDataBtn" class="btn btn-secondary px-4 py-2 fw-bold">Guardar
-                                Datos</button>
+                            <button type="button" id="generatePdfBtn" class="btn btn-primary px-4 py-2 fw-bold">
+                                Generar PDF
+                            </button>
+                            <button type="button" id="saveDataBtn" class="btn btn-secondary px-4 py-2 fw-bold">
+                                Guardar Datos
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -207,7 +225,9 @@
                         <div id="preview-dynamic-content" class="mb-3"></div>
                         <div id="preview-footer-content" class="mb-3"></div>
                         <hr />
-                        <div class="fst-italic small">"2025 - 210 años del Congreso de los Pueblos Libres"</div>
+                        <div class="fst-italic small">
+                            "2025 - 210 años del Congreso de los Pueblos Libres"
+                        </div>
                         <div class="small">Bv. Pellegrini 3100 - Santa Fe (CP 3000)</div>
                     </div>
                 </div>
