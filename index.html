@@ -90,6 +90,9 @@
                                 <option value="actaPaseASumario">
                                     Acta Presentes Pase a Sumario
                                 </option>
+                                <option value="actaIncomparenciaPorFaltaDeDomicilio">
+                                    Acta Audiencia Incomparencia Denunciado por Falta de Domicilio
+                                </option>
                             </select>
                         </div>
 
@@ -111,6 +114,14 @@
                                 <div class="col-sm-6">
                                     <label for="horaAudiencia" class="form-label">Hora de Audiencia</label>
                                     <input type="time" id="horaAudiencia" class="form-control" />
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="nuevaFechaAudiencia" class="form-label">Nueva Fecha de Audiencia</label>
+                                    <input type="date" id="nuevaFechaAudiencia" class="form-control" />
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="nuevaHoraAudiencia" class="form-label">Nueva Hora de Audiencia</label>
+                                    <input type="time" id="nuevaHoraAudiencia" class="form-control" />
                                 </div>
                                 <div class="col-12">
                                     <label for="expediente" class="form-label">N° Expediente (VUF)</label>
@@ -175,6 +186,16 @@
                                 <div class="col-12">
                                     <label for="empresaCP" class="form-label">Código Postal</label>
                                     <input type="text" id="empresaCP" class="form-control" />
+                                </div>
+                                <div class="col-12">
+                                    <label for="empresaWeb" class="form-label">Página web de la Empresa</label>
+                                    <input type="url" id="empresaWeb" class="form-control"
+                                        placeholder="Ej: www.ejemplo.com" />
+                                </div>
+                                <div class="col-12">
+                                    <label for="nuevoDomicilioEmpresa" class="form-label">Nuevo domicilio
+                                        encontrado</label>
+                                    <input type="text" id="nuevoDomicilioEmpresa" class="form-control" />
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="representanteNombre" class="form-label">Nombre del Representante</label>

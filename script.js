@@ -476,13 +476,55 @@ No siendo para más, a las ${data.horaAudiencia || '..'} horas del día ${data.f
             { id: 'editableAgrega', title: 'Agrega', editable: true, placeholder: 'Agregue aquí lo que agrega el denunciante...', defaultText: (data) => data.clausulas.editableAgrega || '...' },
             { id: 'representanteManifiesta', title: 'Manifiesta', editable: true, placeholder: 'Agregue aquí lo que manifiesta el representante...', defaultText: (data) => data.clausulas.representanteManifiesta || '...' }
         ]
-    }
+    },
+actaIncomparenciaPorFaltaDeDomicilio: {
+    formFields: [
+        'expediente',
+        'expedienteEE',
+        'fechaAudiencia',
+        'horaAudiencia',
+        'seccionConsumidor',
+        'seccionEmpresa',
+        'seccionGeneralAdicional',
+        'seccionAcompanante',
+        'seccionDetallesTraslado',
+        'seccionClausulas',
+        'nuevaFechaAudiencia',
+        'nuevaHoraAudiencia'
+    ],
+    intro: (data) => {
+        const acompananteText = data.acompanante.nombre ? ` (acompañado en este acto por el Sr. ${data.acompanante.nombre}, DNI ${data.acompanante.dni})` : '';
+        const cedulaDevueltaText = data.cedulaDevuelta ? `- Se deja constancia que la cédula dirigida a la denunciada ${data.empresa.nombre} ha sido devuelta por el Correo Argentino con la leyenda “${data.motivoDevolucion}”, por lo que se procede a la búsqueda del domicilio de la denunciada, resultando de la página web de la misma ${data.empresaWeb || 'www…..com.ar'} que el mismo es el sito en calle ${data.nuevoDomicilioEmpresa || '…'} de la ciudad de ${data.empresa.ciudad || '…'}, CP ${data.empresa.cp || '…'}.` : '';
+        
+        return `En la Ciudad de ${data.ciudadAcuerdo || 'Santa Fe'}, siendo las ${data.horaAudiencia || '...'} horas del día ${data.fechaAudiencia.day} de ${data.fechaAudiencia.month} de ${data.fechaAudiencia.year}, en los autos EE-${data.expedienteEE || '...-APPSF-PE'} “${data.consumidor.nombre || 'Xxx'} c/ ${data.empresa.nombre || 'Dddd'} y/u ots. s/ presunta infracción a la Ley 24240” ó VUF ${data.expediente || '…'}
+“${data.consumidor.nombre || 'Xxxx'} c/ ${data.empresa.nombre || 'Dddd'} y/u ots. S/ presunta infracción a la Ley 24240”, habiendo sido convocadas las partes a esta Audiencia de Conciliación, (que se celebra de manera virtual a través de la plataforma de videollamada Google Meet (enlace: ${data.empresa.meet || 'https://meet.google.com...'})) comparece ante esta Dirección Provincial de Defensa del Consumidor, el Sr. ${data.consumidor.nombre || 'Xxxx'}, DNI ${data.consumidor.dni || '000'}, con domicilio electrónico en ${data.consumidor.email || 'xxx@hotmail.com'},${acompananteText}, por la parte denunciante.
+Por la denunciada, nadie comparece. El compareciente acepta y reconoce la confidencialidad al amparo de la cual se desarrolla la presente audiencia.
+- Se deja constancia que el compareciente se encuentra en conocimiento de los alcances y características de este trámite administrativo así como también del procedimiento aplicable al mismo.
+${cedulaDevueltaText}
+- Abierto el acto, el denunciante manifiesta que ratifica todos y cada uno de los términos de su denuncia, así como la documentación oportunamente aportada.
+Agrega que ${data.clausulas.editableAgrega || '...'}.
+- Oído lo cual, esta autoridad de aplicación dispone tener presentes los dichos de la denunciante y, ante la frustración de la notificación de esta audiencia a la denunciada, fijar nuevo día y hora de audiencia de conciliación para el próximo ${data.nuevaFechaAudiencia.day} de ${data.nuevaFechaAudiencia.month} de ${data.nuevaFechaAudiencia.year}, a las ${data.nuevaHoraAudiencia || '000'} horas.
+(La misma se celebrará de manera virtual, debiendo las partes conectarse al vínculo ${data.empresa.meet || 'https://meet.google.com...'} para comparecer a la audiencia).
+Queda el compareciente debidamente notificado.
+No siendo para más, a las ${data.horaAudiencia || '..'} horas del día ${data.fechaAudiencia.day} de ${data.fechaAudiencia.month} de ${data.fechaAudiencia.year}, previa lectura y ratificación, se da por finalizado el acto, firmando el funcionario actuante de esta Dirección General de Comercio Interior y Servicios, con la plena conformidad del compareciente.`;
+    },
+    title: 'ACTA AUDIENCIA',
+    header: getCommonHeader(),
+    footer: `
+        PROVINCIA DE SANTA FE
+        Ministerio de Desarrollo Productivo
+    `,
+    clauses: [
+        { id: 'editableAgrega', title: 'Agrega', editable: true, placeholder: 'Agregue aquí lo que agrega el denunciante...', defaultText: (data) => data.clausulas.editableAgrega || '...' }
+    ]
+}
 };
 
 // --- Function to get all data from the form ---
 function getFormData() {
     const fecha = getFormattedDate(document.getElementById("fechaAcuerdo").value);
     const fechaAudiencia = getFormattedDate(document.getElementById("fechaAudiencia").value);
+    const nuevaFechaAudiencia = getFormattedDate(document.getElementById("nuevaFechaAudiencia").value);
 
     // Get clauses data before building the main object
     const clausesData = {};
@@ -500,11 +542,6 @@ function getFormData() {
     }
 
     const data = {
-        representante: {
-            nombre: document.getElementById("representanteNombre").value,
-            dni: document.getElementById("representanteDNI").value,
-            email: document.getElementById("representanteEmail").value,
-        },
         ciudadAcuerdo: document.getElementById("ciudadAcuerdo").value,
         fecha: fecha,
         fechaAudiencia: fechaAudiencia,
@@ -513,14 +550,25 @@ function getFormData() {
         acuerdoDocNumber: document.getElementById("acuerdoDocNumber").value,
         consumidorDenunciante: document.getElementById("consumidorDenunciante").value,
         conciliadorAsignado: document.getElementById("conciliadorAsignado").value,
+        horaAudiencia: document.getElementById("horaAudiencia")
+            ? document.getElementById("horaAudiencia").value
+            : "",
         acompanante: {
             nombre: document.getElementById('acompananteNombre').value,
             dni: document.getElementById('acompananteDNI').value,
         },
-
+        representante: {
+            nombre: document.getElementById("representanteNombre").value,
+            dni: document.getElementById("representanteDNI").value,
+            email: document.getElementById("representanteEmail").value,
+        },
         ausenciaComunicada: document.getElementById('ausenciaComunicada').checked,
         cedulaDevuelta: document.getElementById('cedulaDevuelta').checked,
         motivoDevolucion: document.getElementById('motivoDevolucion').value,
+        empresaWeb: document.getElementById('empresaWeb').value,
+        nuevoDomicilioEmpresa: document.getElementById('nuevoDomicilioEmpresa').value,
+        nuevaFechaAudiencia: nuevaFechaAudiencia,
+        nuevaHoraAudiencia: document.getElementById('nuevaHoraAudiencia').value,
         empresa: {
             apoderado: document.getElementById("empresaApoderado").value,
             dni: document.getElementById("empresaDNI").value,
@@ -549,9 +597,6 @@ function getFormData() {
         cedulaProvincia: document.getElementById("cedulaProvincia").value || "",
         firmanteCedula: document.getElementById("firmanteCedula").value || "",
         firmanteDenunciante: document.getElementById("firmanteDenunciante").value || "",
-        horaAudiencia: document.getElementById("horaAudiencia")
-            ? document.getElementById("horaAudiencia").value
-            : "",
         clausulas: clausesData,
         documentType: agreementTypeSelect.value,
     };
